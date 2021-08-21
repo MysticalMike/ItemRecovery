@@ -43,8 +43,8 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="EmulatedShopMenu.cs" />
         <Compile Include="ModEntry.cs" />
-        <Compile Include="Patches\ItemPurchasePatch.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
