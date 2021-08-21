@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using Force.DeepCloner;
+using Microsoft.Xna.Framework;
 using Netcode;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -13,11 +16,14 @@ namespace ItemRecovery
     {
         private IModHelper helper;
         private IReflectionHelper reflection;
-        
-        public EmulatedShopMenu(IModHelper helper)
+
+        private double CostMultiplier;
+
+        public EmulatedShopMenu(IModHelper helper, double CostMultiplier)
         {
             this.helper = helper;
             reflection = helper.Reflection;
+            this.CostMultiplier = CostMultiplier;
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
         }
         
@@ -49,6 +55,11 @@ namespace ItemRecovery
                 if (!same)
                 {
                     helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+                    
+                    foreach (ISalable salable in newMenu.itemPriceAndStock.Keys)
+                    {
+                        newMenu.itemPriceAndStock[salable][0] = (int)(newMenu.itemPriceAndStock[salable][0] * CostMultiplier);
+                    }
                 }
             }
             else if (e.OldMenu is ShopMenu oldMenu)
