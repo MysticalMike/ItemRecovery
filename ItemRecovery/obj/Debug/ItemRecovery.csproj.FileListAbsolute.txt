@@ -1,6 +1,0 @@
-C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\bin\Debug\ItemRecovery.dll
-C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\bin\Debug\ItemRecovery.pdb
-C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\obj\Debug\ItemRecovery.csprojAssemblyReference.cache
-C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\obj\Debug\ItemRecovery.csproj.CoreCompileInputs.cache
-C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\obj\Debug\ItemRecovery.dll
-C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\obj\Debug\ItemRecovery.pdb
