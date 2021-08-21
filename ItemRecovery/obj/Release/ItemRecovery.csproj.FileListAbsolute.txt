@@ -1,0 +1,6 @@
+C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\bin\Release\ItemRecovery.dll
+C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\bin\Release\ItemRecovery.pdb
+C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\obj\Release\ItemRecovery.csprojAssemblyReference.cache
+C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\obj\Release\ItemRecovery.csproj.CoreCompileInputs.cache
+C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\obj\Release\ItemRecovery.dll
+C:\Users\ninja\RiderProjects\ItemRecovery\ItemRecovery\obj\Release\ItemRecovery.pdb
