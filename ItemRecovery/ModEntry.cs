@@ -10,7 +10,7 @@ namespace ItemRecovery
         {
             this.Config = this.Helper.ReadConfig<ModConfig>();
             double CostMultiplier = this.Config.CostMultiplier;
-            new EmulatedShopMenu(helper, CostMultiplier);
+            new EmulatedShopMenu(helper, this.Monitor, CostMultiplier);
         }
     }
 }

@@ -15,13 +15,15 @@ namespace ItemRecovery
     public class EmulatedShopMenu
     {
         private IModHelper helper;
+        private IMonitor monitor;
         private IReflectionHelper reflection;
 
         private double CostMultiplier;
 
-        public EmulatedShopMenu(IModHelper helper, double CostMultiplier)
+        public EmulatedShopMenu(IModHelper helper, IMonitor monitor, double CostMultiplier)
         {
             this.helper = helper;
+            this.monitor = monitor;
             reflection = helper.Reflection;
             this.CostMultiplier = CostMultiplier;
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
@@ -46,6 +48,8 @@ namespace ItemRecovery
 
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
+            monitor.Log($"Menu: {e.NewMenu}", LogLevel.Debug);
+            
             if (e.NewMenu is ShopMenu newMenu)
             {
                 if (newMenu.portraitPerson.Name != "Marlon")
@@ -55,6 +59,7 @@ namespace ItemRecovery
                 if (!same)
                 {
                     helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+                    monitor.Log($"Opened Recovery Shop {newMenu.IsActive()}", LogLevel.Debug);
                     
                     foreach (ISalable salable in newMenu.itemPriceAndStock.Keys)
                     {
@@ -70,6 +75,7 @@ namespace ItemRecovery
                 bool same = StocksAreEqual(oldMenu.itemPriceAndStock, Utility.getAdventureShopStock());
                 if (!same)
                 {
+                    monitor.Log($"Closed Recovery Shop {oldMenu.IsActive()}", LogLevel.Debug);
                     helper.Events.Input.ButtonPressed -= this.OnButtonPressed;
                 }
             }
@@ -87,12 +93,13 @@ namespace ItemRecovery
             if (item != null)
             {
                 helper.Input.Suppress(e.Button);
+                monitor.Log($"{Game1.player.Name} pressed {e.Button} on item {item.Name}", LogLevel.Debug);
                 
                 if (item.isLostItem)
                     item.isLostItem = false;
             }
             
-            receiveLeftClick(menu, Game1.getMouseX(), Game1.getMouseY(), true);
+            receiveLeftClick(menu, Game1.getMouseX(true), Game1.getMouseY(true), true);
         }
         
         private void receiveLeftClick(ShopMenu menu, int x, int y, bool playSound = true)
