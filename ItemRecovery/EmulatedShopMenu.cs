@@ -42,14 +42,11 @@ namespace ItemRecovery
                 if (!list1[i].Name.Equals(list2[i].Name))
                     return false;
             }
-
             return true;
         }
 
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
-            monitor.Log($"Menu: {e.NewMenu}", LogLevel.Debug);
-            
             if (e.NewMenu is ShopMenu newMenu)
             {
                 if (newMenu.portraitPerson.Name != "Marlon")
@@ -59,11 +56,12 @@ namespace ItemRecovery
                 if (!same)
                 {
                     helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-                    monitor.Log($"Opened Recovery Shop {newMenu.IsActive()}", LogLevel.Debug);
                     
                     foreach (ISalable salable in newMenu.itemPriceAndStock.Keys)
                     {
                         newMenu.itemPriceAndStock[salable][0] = (int)(newMenu.itemPriceAndStock[salable][0] * CostMultiplier);
+                        if (((Item)salable).isLostItem)
+                            ((Item)salable).isLostItem = false;
                     }
                 }
             }
@@ -75,8 +73,13 @@ namespace ItemRecovery
                 bool same = StocksAreEqual(oldMenu.itemPriceAndStock, Utility.getAdventureShopStock());
                 if (!same)
                 {
-                    monitor.Log($"Closed Recovery Shop {oldMenu.IsActive()}", LogLevel.Debug);
                     helper.Events.Input.ButtonPressed -= this.OnButtonPressed;
+                    
+                    foreach (ISalable salable in oldMenu.itemPriceAndStock.Keys)
+                    {
+                        if (((Item)salable).isLostItem)
+                            ((Item)salable).isLostItem = true;
+                    }
                 }
             }
         }
@@ -93,11 +96,8 @@ namespace ItemRecovery
             if (item != null)
             {
                 helper.Input.Suppress(e.Button);
-                monitor.Log($"{Game1.player.Name} pressed {e.Button} on item {item.Name}", LogLevel.Debug);
-                
-                if (item.isLostItem)
-                    item.isLostItem = false;
             }
+            else return;
             
             receiveLeftClick(menu, Game1.getMouseX(true), Game1.getMouseY(true), true);
         }
@@ -333,8 +333,8 @@ namespace ItemRecovery
 
             if (menu.itemPriceAndStock[item][1] > 0)
                 return false;
-            Game1.player.itemsLostLastDeath.Remove((Item)menu.hoveredItem);
-            menu.hoveredItem = (ISalable)null;
+            Game1.player.itemsLostLastDeath.Remove((Item)item);
+            item = (ISalable)null;
             return true;
         }
     }
