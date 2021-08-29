@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using Force.DeepCloner;
-using Microsoft.Xna.Framework;
 using Netcode;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -49,7 +46,7 @@ namespace ItemRecovery
         {
             if (e.NewMenu is ShopMenu newMenu)
             {
-                if (newMenu.portraitPerson.Name != "Marlon")
+                if (newMenu.portraitPerson == null || newMenu.portraitPerson.Name != "Marlon")
                     return;
                 
                 bool same = StocksAreEqual(newMenu.itemPriceAndStock, Utility.getAdventureShopStock());
@@ -67,7 +64,7 @@ namespace ItemRecovery
             }
             else if (e.OldMenu is ShopMenu oldMenu)
             {
-                if (oldMenu.portraitPerson.Name != "Marlon")
+                if (oldMenu.portraitPerson == null || oldMenu.portraitPerson.Name != "Marlon")
                     return;
                 
                 bool same = StocksAreEqual(oldMenu.itemPriceAndStock, Utility.getAdventureShopStock());
