@@ -44,6 +44,8 @@ namespace ItemRecovery
 
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
+            Farmer farmer = (Farmer)sender;
+            
             if (e.NewMenu is ShopMenu newMenu)
             {
                 if (newMenu.portraitPerson == null || newMenu.portraitPerson.Name != "Marlon")
@@ -53,6 +55,8 @@ namespace ItemRecovery
                 if (!same)
                 {
                     helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+                    string text = "Test text right here!";
+                    newMenu.potraitPersonDialogue = text;
                     
                     foreach (ISalable salable in newMenu.itemPriceAndStock.Keys)
                     {
