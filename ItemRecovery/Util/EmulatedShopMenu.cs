@@ -1,109 +1,23 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Netcode;
 using StardewModdingAPI;
-using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace ItemRecovery
+namespace ItemRecovery.Util
 {
     public class EmulatedShopMenu
     {
-        private IModHelper helper;
-        private IMonitor monitor;
-        private IReflectionHelper reflection;
+        private static IModHelper helper;
+        private static IReflectionHelper reflection;
 
-        private double CostMultiplier;
-
-        public EmulatedShopMenu(IModHelper helper, IMonitor monitor, double CostMultiplier)
+        public EmulatedShopMenu(IModHelper Helper)
         {
-            this.helper = helper;
-            this.monitor = monitor;
+            helper = Helper;
             reflection = helper.Reflection;
-            this.CostMultiplier = CostMultiplier;
-            helper.Events.Display.MenuChanged += this.OnMenuChanged;
         }
         
-        private bool StocksAreEqual(Dictionary<ISalable, int[]> stock1, Dictionary<ISalable, int[]> stock2)
-        {
-            if (stock1.Count != stock2.Count)
-                return false;
-            
-            List<ISalable> list1 = stock1.Keys.ToList();
-            List<ISalable> list2 = stock1.Keys.ToList();
-            
-            for (int i = 0; i < list1.Count; i++)
-            {
-                if (!list1[i].Name.Equals(list2[i].Name))
-                    return false;
-            }
-            return true;
-        }
-
-        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
-        {
-            Farmer farmer = (Farmer)sender;
-            
-            if (e.NewMenu is ShopMenu newMenu)
-            {
-                if (newMenu.portraitPerson == null || newMenu.portraitPerson.Name != "Marlon")
-                    return;
-                
-                bool same = StocksAreEqual(newMenu.itemPriceAndStock, Utility.getAdventureShopStock());
-                if (!same)
-                {
-                    helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-                    string text = "Test text right here!";
-                    newMenu.potraitPersonDialogue = text;
-                    
-                    foreach (ISalable salable in newMenu.itemPriceAndStock.Keys)
-                    {
-                        newMenu.itemPriceAndStock[salable][0] = (int)(newMenu.itemPriceAndStock[salable][0] * CostMultiplier);
-                        if (((Item)salable).isLostItem)
-                            ((Item)salable).isLostItem = false;
-                    }
-                }
-            }
-            else if (e.OldMenu is ShopMenu oldMenu)
-            {
-                if (oldMenu.portraitPerson == null || oldMenu.portraitPerson.Name != "Marlon")
-                    return;
-                
-                bool same = StocksAreEqual(oldMenu.itemPriceAndStock, Utility.getAdventureShopStock());
-                if (!same)
-                {
-                    helper.Events.Input.ButtonPressed -= this.OnButtonPressed;
-                    
-                    foreach (ISalable salable in oldMenu.itemPriceAndStock.Keys)
-                    {
-                        if (((Item)salable).isLostItem)
-                            ((Item)salable).isLostItem = true;
-                    }
-                }
-            }
-        }
-
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
-        {
-            if (!(Game1.activeClickableMenu is ShopMenu menu))
-                return;
-
-            if (e.Button != SButton.MouseLeft && e.Button != SButton.MouseRight)
-                return;
-            
-            Item item = (Item)menu.hoveredItem;
-            if (item != null)
-            {
-                helper.Input.Suppress(e.Button);
-            }
-            else return;
-            
-            receiveLeftClick(menu, Game1.getMouseX(true), Game1.getMouseY(true), true);
-        }
-        
-        private void receiveLeftClick(ShopMenu menu, int x, int y, bool playSound = true)
+        public static void receiveLeftClick(ShopMenu menu, int x, int y, bool playSound = true)
         {
             for (int index = 0; index < menu.forSaleButtons.Count; ++index)
             {
@@ -157,7 +71,7 @@ namespace ItemRecovery
         }
 
 
-        private bool tryToPurchaseItem(
+        private static bool tryToPurchaseItem(
             ShopMenu menu,
             ISalable item,
             ISalable held_item,
