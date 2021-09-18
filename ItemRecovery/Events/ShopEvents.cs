@@ -14,13 +14,14 @@ namespace ItemRecovery.Events
     {
         private IModHelper helper;
         private IMonitor monitor;
-        private double CostMultiplier;
+        
+        public static double CostMultiplier;
 
-        public ShopEvents(IModHelper helper, IMonitor monitor, double CostMultiplier)
+        public ShopEvents(IModHelper helper, IMonitor monitor, double cost_multiplier)
         {
             this.helper = helper;
             this.monitor = monitor;
-            this.CostMultiplier = CostMultiplier;
+            CostMultiplier = cost_multiplier;
             
             helper.Events.Display.MenuChanged += OnMenuChanged;
         }

@@ -11,7 +11,7 @@ namespace ItemRecovery.Util
         private static IModHelper helper;
         private static IReflectionHelper reflection;
 
-        private static int days_till_recoverable;
+        public static int days_till_recoverable;
 
         public ShopHelper(IModHelper Helper, int DaysTillRecoverable)
         {

@@ -6,22 +6,19 @@ namespace ItemRecovery
 {
     public class ModEntry : Mod
     {
-        private ModConfig Config;
+        public static ModConfig Config;
         
         public override void Entry(IModHelper helper)
         {
             Config = helper.ReadConfig<ModConfig>();
+            
+            new DebugCommands(Monitor, helper, Config.DaysTillRecoverable);
 
             new DeathEvents(helper, Monitor);
             new ShopEvents(helper, Monitor, Config.CostMultiplier);
             new ShopHelper(helper, Config.DaysTillRecoverable);
 
-            helper.ConsoleCommands.Add("get_dsld", "Get days since last death", this.GetDSLD);
-        }
-
-        private void GetDSLD(string command, string[] args)
-        {
-            ModDataHelper.GetAllPlayerDSLD(Helper, Monitor);
+            helper.ConsoleCommands.Add("ir", "Item recovery command prefix", DebugCommands.GetIR);
         }
     }
 }
