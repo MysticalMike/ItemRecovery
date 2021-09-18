@@ -2,6 +2,7 @@
 Recover all lost items from the Adventurers Guild in Stardew Valley.
 
 ###Config
+
 `CostMultiplier`
 - Percentage of sale price to buy back for
 - Default 0.5
@@ -11,6 +12,7 @@ Recover all lost items from the Adventurers Guild in Stardew Valley.
 - Default 0
 
 ###Commands
+
 `ir debug`
 - Shows each players time since last death and recover time
 
