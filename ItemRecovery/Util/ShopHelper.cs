@@ -6,15 +6,30 @@ using StardewValley.Menus;
 
 namespace ItemRecovery.Util
 {
-    public class EmulatedShopMenu
+    public class ShopHelper
     {
         private static IModHelper helper;
         private static IReflectionHelper reflection;
 
-        public EmulatedShopMenu(IModHelper Helper)
+        private static int days_till_recoverable;
+
+        public ShopHelper(IModHelper Helper, int DaysTillRecoverable)
         {
             helper = Helper;
             reflection = helper.Reflection;
+            days_till_recoverable = DaysTillRecoverable;
+        }
+
+        public static bool CanGetItemsBack(long id)
+        {
+            return ModDataHelper.GetPlayerDSLD(id, helper) >= days_till_recoverable;
+        }
+        
+        public static string GetPortraitMessage(long id)
+        {
+            if (CanGetItemsBack(id))
+                return TranslationHelper.GetTranslation("ItemsAvailable", helper);
+            return TranslationHelper.GetTranslation("ItemsNotAvailable", helper);
         }
         
         public static void receiveLeftClick(ShopMenu menu, int x, int y, bool playSound = true)

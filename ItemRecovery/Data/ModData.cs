@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ItemRecovery
+namespace ItemRecovery.Data
 {
     public class ModData
     {

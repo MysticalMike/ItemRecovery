@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using ItemRecovery.Util;
 using StardewModdingAPI;
@@ -12,14 +11,11 @@ namespace ItemRecovery.Events
         private static IModHelper helper;
         private static IMonitor monitor;
 
-        private static Dictionary<long, int> _DaysSinceLastDeath;
-
         public DeathEvents(IModHelper ihelper, IMonitor imonitor)
         {
             helper = ihelper;
             monitor = imonitor;
             
-            // helper.Events.GameLoop.DayEnding += OnGameSaving;
             helper.Events.Player.InventoryChanged += OnInventoryChanged;
             helper.Events.GameLoop.DayStarted += OnDayStarted;
         }
@@ -33,7 +29,7 @@ namespace ItemRecovery.Events
             
             if (ListHelper.SortListsThenCompareItemNames(farmer.itemsLostLastDeath.ToList(), e.Removed.ToList()))
             {
-                DataHelper.ResetPlayerDSLD("ItemRecoveryData", farmer.UniqueMultiplayerID, helper);
+                ModDataHelper.ResetPlayerDSLD(farmer.UniqueMultiplayerID, helper);
             }
         }
         
@@ -42,47 +38,7 @@ namespace ItemRecovery.Events
             if (!Context.IsMainPlayer)
                 return;
             
-            DataHelper.AdvanceAllPlayerDSLD("ItemRecoveryData", helper);
+            ModDataHelper.AdvanceAllPlayerDSLD(helper);
         }
-        
-        // private void OnGameSaving(object sender, DayEndingEventArgs e)
-        // {
-        //     Farmer main_farmer = (Farmer)sender;
-        //     if (Game1.IsMultiplayer && !main_farmer.IsMainPlayer)
-        //         return;
-        //     
-        //     helper.Data.WriteSaveData("ItemRecoveryData", _DaysSinceLastDeath);
-        // }
-
-        // private static void OnGameSaving(object sender, SavingEventArgs e)
-        // {
-        //     Farmer main_farmer = (Farmer)sender;
-        //     if (!main_farmer.IsMainPlayer)
-        //         return;
-        //     
-        //     ModData data = helper.Data.ReadSaveData<ModData>("ItemRecoveryData");
-        //     Dictionary<long, int> DaysSinceLastDeath = data == null ? new Dictionary<long, int>() : data.DaysSinceLastDeath;
-        //     
-        //     foreach (Farmer farmer in Game1.getAllFarmers())
-        //     {
-        //         long multiplayer_id = farmer.UniqueMultiplayerID;
-        //         
-        //         if (!DaysSinceLastDeath.ContainsKey(multiplayer_id))
-        //         {
-        //             DaysSinceLastDeath.Add(multiplayer_id, 0);
-        //         }
-        //         
-        //         if (farmer.itemsLostLastDeath.Count > 0)
-        //         {
-        //             DaysSinceLastDeath[multiplayer_id]++;
-        //         }
-        //         else
-        //         {
-        //             DaysSinceLastDeath[multiplayer_id] = 0;
-        //         }
-        //     }
-        //     
-        //     helper.Data.WriteSaveData("ItemRecoveryData", data);
-        // }
     }
 }

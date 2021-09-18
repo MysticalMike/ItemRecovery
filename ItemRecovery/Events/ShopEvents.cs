@@ -1,5 +1,8 @@
+using System;
 using System.Linq;
+using Force.DeepCloner;
 using ItemRecovery.Util;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -21,7 +24,7 @@ namespace ItemRecovery.Events
             
             helper.Events.Display.MenuChanged += OnMenuChanged;
         }
-        
+
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
             if (e.NewMenu is ShopMenu newMenu)
@@ -33,8 +36,15 @@ namespace ItemRecovery.Events
                 if (!same)
                 {
                     helper.Events.Input.ButtonPressed += OnButtonPressed;
-                    string text = "Test text right here!";
-                    newMenu.potraitPersonDialogue = text;
+                    string text = ShopHelper.GetPortraitMessage(Game1.player.UniqueMultiplayerID);
+                    newMenu.potraitPersonDialogue = Game1.parseText(text, Game1.dialogueFont, 304);
+
+                    if (!ShopHelper.CanGetItemsBack(Game1.player.UniqueMultiplayerID))
+                    {
+                        newMenu.itemPriceAndStock.Clear();
+                        newMenu.forSale.Clear();
+                        return;
+                    }
                     
                     foreach (ISalable salable in newMenu.itemPriceAndStock.Keys)
                     {
@@ -78,7 +88,7 @@ namespace ItemRecovery.Events
             }
             else return;
             
-            EmulatedShopMenu.receiveLeftClick(menu, Game1.getMouseX(true), Game1.getMouseY(true), true);
+            ShopHelper.receiveLeftClick(menu, Game1.getMouseX(true), Game1.getMouseY(true), true);
         }
     }
 }
