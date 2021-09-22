@@ -17,6 +17,14 @@ namespace ItemRecovery.Util
         {
             helper.Data.WriteSaveData(mod_data_key, data);
         }
+
+        private static void CreateIfNoKey(long id, IModHelper helper)
+        {
+            ModData mod_data = GetModData(helper);
+            if (!mod_data.DaysSinceLastDeath.ContainsKey(id))
+                mod_data.DaysSinceLastDeath[id] = 0;
+            SaveModData(helper, mod_data);
+        }
         
         public static void ResetPlayerDSLD(long id, IModHelper helper)
         {
@@ -27,6 +35,7 @@ namespace ItemRecovery.Util
 
         private static void AdvancePlayerDSLD(long id, IModHelper helper)
         {
+            CreateIfNoKey(id, helper);
             ModData mod_data = GetModData(helper);
             mod_data.DaysSinceLastDeath[id]++;
             SaveModData(helper, mod_data);
