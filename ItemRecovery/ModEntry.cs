@@ -9,7 +9,6 @@ namespace ItemRecovery
         public static ModConfig Config;
         private static IMonitor _monitor;
         
-        // test
         public override void Entry(IModHelper helper)
         {
             Config = helper.ReadConfig<ModConfig>();
