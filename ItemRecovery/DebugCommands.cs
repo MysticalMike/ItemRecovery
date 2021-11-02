@@ -36,10 +36,26 @@ namespace ItemRecovery
                     foreach (Farmer farmer in Game1.getAllFarmers())
                     {
                         string name = farmer.Name.PadRight(10,' ');
-                        string last_death = ModDataHelper.GetPlayerDSLD(farmer.UniqueMultiplayerID, _helper).ToString().PadRight(4, ' ');
+                        string last_death = ModDataHelper.GetPlayerDSLD(farmer.UniqueMultiplayerID).ToString().PadRight(4, ' ');
                         string till_recoverable = _days_till_recoverable.ToString().PadRight(3, ' ');
                         
                         _monitor.Log($"Player: {name} | LastDeath: {last_death} | RecoverTime: {till_recoverable} |", LogLevel.Info);
+                    }
+                    _monitor.Log(line, LogLevel.Info);
+                    break;
+                }
+                case "get_cached_money":
+                case "get_cam":
+                {
+                    string line = "".PadRight(67, '-');
+                    _monitor.Log(line, LogLevel.Info);
+                    foreach (Farmer farmer in Game1.getAllFarmers())
+                    {
+                        string name = farmer.Name.PadRight(10,' ');
+                        string money = farmer.Money.ToString().PadRight(10, ' ');
+                        string cached_money = DeathEvents.cached_money.ToString().PadRight(10, ' ');
+                        
+                        _monitor.Log($"Player: {name} | Money: {money} | Cached Money: {cached_money} |", LogLevel.Info);
                     }
                     _monitor.Log(line, LogLevel.Info);
                     break;
@@ -55,8 +71,8 @@ namespace ItemRecovery
                     int rt = int.Parse(args[1]);
                     
                     ShopHelper.days_till_recoverable = rt;
-                    ModEntry.Config.DaysTillRecoverable = rt;
-                    _helper.WriteConfig(ModEntry.Config);
+                    ModEntry.config.DaysTillRecoverable = rt;
+                    _helper.WriteConfig(ModEntry.config);
                     _days_till_recoverable = rt;
                     
                     _monitor.Log($"Days till recoverable set to {rt}", LogLevel.Info);
@@ -73,8 +89,8 @@ namespace ItemRecovery
                     double cm = double.Parse(args[1]);
 
                     ShopEvents.CostMultiplier = cm;
-                    ModEntry.Config.CostMultiplier = cm;
-                    _helper.WriteConfig(ModEntry.Config);
+                    ModEntry.config.CostMultiplier = cm;
+                    _helper.WriteConfig(ModEntry.config);
                     
                     _monitor.Log($"Cost multiplier set to {cm}", LogLevel.Info);
                     break;

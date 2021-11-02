@@ -22,7 +22,7 @@ namespace ItemRecovery.Util
 
         public static bool CanGetItemsBack(long id)
         {
-            return ModDataHelper.GetPlayerDSLD(id, helper) >= days_till_recoverable;
+            return ModDataHelper.GetPlayerDSLD(id) >= days_till_recoverable;
         }
         
         public static string GetPortraitMessage(long id)
