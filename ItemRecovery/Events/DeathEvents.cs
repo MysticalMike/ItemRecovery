@@ -20,7 +20,7 @@ namespace ItemRecovery.Events
             
             helper.Events.Player.InventoryChanged += OnInventoryChanged;
             helper.Events.GameLoop.DayStarted += OnDayStarted;
-            helper.Events.GameLoop.UpdateTicked += UpdateTicked;
+            // helper.Events.GameLoop.UpdateTicked += UpdateTicked;
             helper.Events.Multiplayer.PeerConnected += PeerConnected;
         }
 
@@ -35,11 +35,7 @@ namespace ItemRecovery.Events
                 ModEntry.GetManager().WriteToPlayer(e.Peer.PlayerID);
         }
 
-        // TODO Trying to figure out a way to not lose money after dying
-        // In Farmer.cs Found event that does the whole thing, passout?
-        // Wanted to do it non harmony way, but having trouble
-        // Cached money from before death vvv
-        // But idk where to recover
+        // TODO WIP Money Recovery System
         private void UpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             Farmer player = Game1.player;
@@ -66,12 +62,7 @@ namespace ItemRecovery.Events
         private static void OnInventoryChanged(object sender, InventoryChangedEventArgs e)
         {
             Farmer farmer = e.Player;
-            // if (cached_money.ContainsKey(farmer.UniqueMultiplayerID))
-            // {
-            //     farmer.Money = cached_money[farmer.UniqueMultiplayerID];
-            //     cached_money.Remove(farmer.UniqueMultiplayerID);
-            // }
-
+            
             if (farmer.itemsLostLastDeath.Count < 1)
                 return;
             
